@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "OrderApp",
-    "slug": "OrderApp",
+    "name": "AutoStore",
+    "slug": "AutoStore",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Image/icons/car.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
