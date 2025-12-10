@@ -8,12 +8,14 @@ import {
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 
 const providers = [
   {
     id: "1",
     name: "Crystal Clear Car Wash",
-    desc: "We offer a variety of washes.",
+    desc: "Hyderabad",
     distance: "1.5 km",
     rating: 4.5,
     image: require("../../assets/Image/provider/p1.jpg"),
@@ -21,7 +23,7 @@ const providers = [
   {
     id: "2",
     name: "AquaShine Car Wash",
-    desc: "We offer a variety of washes.",
+    desc: "Gachibowli",
     distance: "2.3 km",
     rating: 4.7,
     image: require("../../assets/Image/provider/p2.jpg"),
@@ -29,21 +31,32 @@ const providers = [
   {
     id: "3",
     name: "Prestige Auto Spa",
-    desc: "We offer a variety of washes.",
+    desc: "Ameerpet",
     distance: "3.0 km",
     rating: 4.8,
     image: require("../../assets/Image/provider/p3.jpg"),
   },
+
+   {
+    id: "4",
+    name: "Prestige Auto Spa",
+    desc: "Kondapur",
+    distance: "3.0 km",
+    rating: 4.8,
+    image: require("../../assets/Image/provider/p1.jpg"),
+  },
 ];
 
 const FeatureScreen = () => {
+const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Nearby Car Service Centers</Text>
+      <Text style={styles.heading}>Feature Car Service Centers</Text>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {providers.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.card}>
+          <TouchableOpacity key={item.id} style={styles.card} onPress={() => navigation.navigate("ServiceDetails", { data: item })}>
             <Image source={item.image} style={styles.cardImg} />
 
             <View style={styles.content}>

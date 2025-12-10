@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   StatusBar,
   Platform,
-  Modal,
 } from "react-native";
 import { Ionicons, FontAwesome, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -24,14 +23,17 @@ const providers = [
   { id: "4", name: "Turbowash Express", desc: "Express cleaning specialists", rating: 4.6, distance: "1.9 km", image: require("../../assets/Image/provider/p1.jpg") },
 ];
 
-const categories = ["Service Station", "Car Tyers", "Puncture Shops", "Detailing", "Polish & Wax"];
+const categories = [
+  "Service Station", "Car Tyers", "Puncture Shops", "Detailing",
+  "Polish & Wax", "Car Tyers", "Puncture Shops", "Detailing", "Polish & Wax",
+];
 
 const ServiceListScreen = () => {
   const navigation = useNavigation();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("Service Station");
 
-  const [filterModal, setFilterModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("Service Station");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showFilterPopup, setShowFilterPopup] = useState(false);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -53,18 +55,26 @@ const ServiceListScreen = () => {
           <Text style={styles.headerTitle}>Stores</Text>
 
           {/* FILTER ICON */}
-          <TouchableOpacity onPress={() => setFilterModal(true)}>
+          <TouchableOpacity
+            onPress={() => {
+              setShowFilterPopup(true);
+              setShowDropdown(false);
+            }}
+          >
             <Ionicons name="filter" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
 
         <Text style={styles.headerSubtitle}>Choose the best service near you</Text>
 
-        {/* DROPDOWN */}
+        {/* CATEGORY DROPDOWN */}
         <View style={styles.dropdownWrapper}>
           <TouchableOpacity
             style={styles.dropdownBox}
-            onPress={() => setShowDropdown(!showDropdown)}
+            onPress={() => {
+              setShowDropdown(!showDropdown);
+              setShowFilterPopup(false);
+            }}
           >
             <Text style={styles.dropdownText}>{selectedCategory}</Text>
             <Ionicons
@@ -76,56 +86,62 @@ const ServiceListScreen = () => {
 
           {showDropdown && (
             <View style={styles.dropdownAbsolute}>
-              {categories.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.dropdownItem}
-                  onPress={() => {
-                    setSelectedCategory(item);
-                    setShowDropdown(false);
-                  }}
-                >
-                  <Text style={styles.dropdownItemText}>{item}</Text>
-                </TouchableOpacity>
-              ))}
+              <ScrollView style={{ maxHeight: 200 }}>
+                {categories.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.dropdownItem}
+                    onPress={() => {
+                      setSelectedCategory(item);
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <Text style={styles.dropdownItemText}>{item}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
             </View>
           )}
         </View>
 
-        {/* FILTER MODAL */}
-        <Modal visible={filterModal} transparent animationType="slide">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
+        {/* ⭐ CENTER POPUP WITH RADIO BUTTONS */}
+        {showFilterPopup && (
+          <View style={styles.popupOverlay}>
+            <View style={styles.popupBox}>
 
+              {/* CLOSE BUTTON */}
               <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setFilterModal(false)}
+                style={styles.popupClose}
+                onPress={() => setShowFilterPopup(false)}
               >
                 <Ionicons name="close" size={26} color="#333" />
               </TouchableOpacity>
 
-              <Text style={styles.modalTitle}>Filter by Service</Text>
+              <Text style={styles.popupTitle}>Filter by Category</Text>
 
-              {categories.map((item, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.radioRow}
-                  onPress={() => {
-                    setSelectedCategory(item);
-                    setFilterModal(false);
-                  }}
-                >
-                  <Ionicons
-                    name={selectedCategory === item ? "radio-button-on" : "radio-button-off"}
-                    size={22}
-                    color={colors.primary}
-                  />
-                  <Text style={styles.radioLabel}>{item}</Text>
-                </TouchableOpacity>
-              ))}
+              <ScrollView style={{ maxHeight: 280 }}>
+                {categories.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.popupRow}
+                    onPress={() => {
+                      setSelectedCategory(item);
+                      setShowFilterPopup(false);
+                    }}
+                  >
+                    <Ionicons
+                      name={selectedCategory === item ? "radio-button-on" : "radio-button-off"}
+                      size={22}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.popupItemText}>{item}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+
             </View>
           </View>
-        </Modal>
+        )}
 
         {/* MAIN CONTENT */}
         <CategoryScreen />
@@ -177,17 +193,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     width: "100%",
-    height: Platform.OS === "android" ? StatusBar.currentHeight + 150 : 160,
+    height: Platform.OS === "android" ? StatusBar.currentHeight + 130 : 110,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
 
   headerArea: {
     paddingHorizontal: 18,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 8 : 12,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingVertical: 10,
   },
 
   headerTitle: {
@@ -209,8 +225,7 @@ const styles = StyleSheet.create({
   dropdownWrapper: {
     marginHorizontal: 18,
     marginTop: 12,
-    position: "relative",
-    zIndex: 9999,
+    zIndex: 999,
   },
 
   dropdownBox: {
@@ -241,48 +256,61 @@ const styles = StyleSheet.create({
   dropdownItem: { paddingVertical: 10, paddingHorizontal: 14 },
   dropdownItemText: { fontSize: 14, fontWeight: "600", color: "#444" },
 
+  /* ⭐ CENTER POPUP */
+  popupOverlay: {
+    position: "absolute",
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+  },
+
+  popupBox: {
+    width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    elevation: 10,
+    maxHeight: 350,
+  },
+
+  popupClose: {
+    position: "absolute",
+    right: 10,
+    top: 10,
+    padding: 5,
+  },
+
+  popupTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 12,
+    marginTop: 10,
+  },
+
+  popupRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderColor: "#eee",
+  },
+
+  popupItemText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#333",
+    marginLeft: 12,
+  },
+
   heading: {
     fontSize: 18,
     fontWeight: "700",
     color: colors.textDark,
     marginBottom: 12,
     paddingLeft: 10,
-  },
-
-  /* MODAL */
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "flex-end",
-  },
-
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-  },
-
-  closeBtn: {
-    position: "absolute",
-    right: 15,
-    top: 12,
-    padding: 6,
-  },
-
-  modalTitle: { fontSize: 18, fontWeight: "800", marginBottom: 18 },
-
-  radioRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-  },
-
-  radioLabel: {
-    fontSize: 16,
-    marginLeft: 12,
-    fontWeight: "600",
-    color: "#333",
   },
 
   /* CARD */
