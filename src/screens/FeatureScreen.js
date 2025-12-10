@@ -3,69 +3,67 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  Image,
   TouchableOpacity,
+  Image,
+  ScrollView,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import colors from "../constants/colors";
+import { Ionicons } from "@expo/vector-icons";
 
 const providers = [
   {
     id: "1",
     name: "Crystal Clear Car Wash",
-    price: "$10",
+    desc: "We offer a variety of washes.",
+    distance: "1.5 km",
     rating: 4.5,
     image: require("../../assets/Image/provider/p1.jpg"),
   },
   {
     id: "2",
     name: "AquaShine Car Wash",
-    price: "$10",
-    rating: 4.2,
+    desc: "We offer a variety of washes.",
+    distance: "2.3 km",
+    rating: 4.7,
     image: require("../../assets/Image/provider/p2.jpg"),
   },
   {
     id: "3",
     name: "Prestige Auto Spa",
-    price: "$10",
+    desc: "We offer a variety of washes.",
+    distance: "3.0 km",
     rating: 4.8,
     image: require("../../assets/Image/provider/p3.jpg"),
   },
 ];
 
-const HomeScreen = () => {
-  const navigation = useNavigation();
-
+const FeatureScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Nearby Service Providers</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-      >
+      <Text style={styles.heading}>Nearby Car Service Centers</Text>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {providers.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.card}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("ServiceDetails", { provider: item })}
-          >
-            <Image source={item.image} style={styles.cardImage} />
+          <TouchableOpacity key={item.id} style={styles.card}>
+            <Image source={item.image} style={styles.cardImg} />
 
-            <Text style={styles.cardTitle} numberOfLines={2}>
-              {item.name}
-            </Text>
+            <View style={styles.content}>
+              <Text style={styles.name} numberOfLines={1}>
+                {item.name}
+              </Text>
 
-            <View style={styles.ratingRow}>
-              <FontAwesome name="star" size={12} color="#FFB000" />
-              <Text style={styles.ratingText}>{item.rating}</Text>
-            </View>
+              <Text style={styles.desc} numberOfLines={1}>
+                {item.desc}
+              </Text>
 
-            <View style={styles.priceTag}>
-              <Text style={styles.priceText}>{item.price}</Text>
+              <View style={styles.row}>
+                <Ionicons name="location" size={12} color="#007AFF" />
+                <Text style={styles.distance}>{item.distance}</Text>
+              </View>
+
+              <View style={styles.row}>
+                <Ionicons name="star" size={12} color="#FFD700" />
+                <Text style={styles.rating}>{item.rating}</Text>
+              </View>
             </View>
           </TouchableOpacity>
         ))}
@@ -74,84 +72,68 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default FeatureScreen;
 
 const styles = StyleSheet.create({
-
   container: {
-    paddingVertical: 10,
+    marginTop: 20,
+    paddingHorizontal: 15,
   },
-  bannerContainer: {
-    width: "100%",
-    height: 180,
-  },
-
-  bannerImage: {
-    width: "100%",
-    height: "100%",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-
-  sectionTitle: {
+  heading: {
     fontSize: 18,
-    fontWeight: "800",
-    color: colors.textDark,
-    marginLeft: 12,
+    fontWeight: "700",
+    color: "#222",
     marginBottom: 10,
   },
+
+  // Compact card size
   card: {
-    width: 120,
+    width: 125,
     backgroundColor: "#fff",
-    borderRadius: 12,
-    marginRight: 12,
-    padding: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-  },
-
-  cardImage: {
-    width: "100%",
-    height: 65,
+    marginHorizontal: 5,
     borderRadius: 10,
-    marginBottom: 6,
+    overflow: "hidden",
+    elevation: 3,
+    marginVertical:5
   },
 
-  cardTitle: {
-    fontSize: 13,
+  cardImg: {
+    width: "100%",
+    height: 80, // small image
+  },
+
+  content: {
+    padding: 8,
+  },
+
+  name: {
+    fontSize: 14,
     fontWeight: "700",
-    color: colors.textDark,
-    marginBottom: 4,
-    lineHeight: 16,
+    color: "#333",
   },
 
-  ratingRow: {
+  desc: {
+    fontSize: 11,
+    color: "#777",
+    marginTop: 2,
+  },
+
+  row: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 4,
+    marginTop: 5,
   },
 
-  ratingText: {
+  distance: {
     fontSize: 11,
-    marginLeft: 4,
-    fontWeight: "600",
     color: "#444",
+    marginLeft: 3,
   },
 
-  priceTag: {
-    backgroundColor: "#E8F9E7",
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-    alignSelf: "flex-start",
-  },
-
-  priceText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "green",
+  rating: {
+    fontSize: 11,
+    color: "#444",
+    fontWeight: "600",
+    marginLeft: 3,
   },
 });
