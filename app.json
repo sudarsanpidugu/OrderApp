@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "StoreApp",
-    "slug": "StoreApp",
+    "name": "AutoStore",
+    "slug": "AutoStore",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Image/icons/logo.jpg",
+    "icon": "./assets/Image/icons/car.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {

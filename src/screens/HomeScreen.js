@@ -5,7 +5,7 @@ import colors from "../constants/colors";
 import BannerSlider from "./BannerSlider";
 import ServicesScreen from "./ServicesScreen";
 import PopularServiceProviders from "./PopularServiceProvider";
-import ActionStatsCards from "./ActionStatsCards";
+import FeatureScreen from "./FeatureScreen";
 
 const HomeScreen = () => {
   return (
@@ -15,12 +15,12 @@ const HomeScreen = () => {
       <FlatList
         data={[1]}  // dummy item to enable FlatList
         keyExtractor={(item) => item.toString()}
-        // renderItem={() => <PopularServiceProviders />}
+        renderItem={() => <PopularServiceProviders />}
         ListHeaderComponent={
           <>
             <BannerSlider />
-            <ActionStatsCards />
-            {/* <ServicesScreen /> */}
+            <FeatureScreen />
+            <ServicesScreen />
           </>
         }
         showsVerticalScrollIndicator={false}

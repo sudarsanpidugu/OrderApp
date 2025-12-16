@@ -48,25 +48,23 @@ const OtpLoginScreen = ({ navigation }) => {
     setTimer(30);
     setCanResend(false);
   };
-  
-  const handleVerify = () => {
-    const enteredOtp = otp.join("");
 
-    if (enteredOtp.length < 4) {
-      alert("Please enter valid 4 digit OTP");
-      return;
-    }
+const handleVerify = () => {
+  const enteredOtp = otp.join("");
 
-    if (enteredOtp !== "1234") {
-      alert("Invalid OTP, try again");
-      return;
-    }
+  if (enteredOtp.length < 4) {
+    alert("Please enter valid 4 digit OTP");
+    return;
+  }
 
-    console.log("Verified OTP:", enteredOtp);
+  if (enteredOtp !== "1234") {
+    alert("Invalid OTP, try again");
+    return;
+  }
 
-    // 🔥 THIS IS THE IMPORTANT FIX
-    navigation.replace("Main", { screen: "Home" });
-  };
+  console.log("Verified OTP:", enteredOtp);
+  navigation.navigate("Signup"); 
+};
 
 
   const handleOTPChange = (value, index) => {
@@ -84,9 +82,9 @@ const OtpLoginScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
-        source={require("../../assets/Image/icons/store.png")}
+        source={require("../../assets/Image/backgrounds/car.png")}
         style={styles.background}
-        resizeMode="cover"
+        resizeMode="contain"
       >
         <View style={styles.overlay} />
 
@@ -163,7 +161,7 @@ const styles = StyleSheet.create({
   background: { flex: 1, width: "100%", height: "100%" },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    backgroundColor: "rgba(255,255,255,0.45)",
   },
   container: { flex: 1, justifyContent: "center", padding: 22 },
   title: {
@@ -194,7 +192,7 @@ const styles = StyleSheet.create({
   input: { flex: 1, fontSize: 16, marginLeft: 10, color: colors.textDark },
   otpContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     marginTop: 25,
   },
   otpBox: {
@@ -211,7 +209,7 @@ const styles = StyleSheet.create({
   resendRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 25,
+    marginTop: 15,
   },
   resendText: {
     fontSize: 16,
@@ -223,7 +221,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 14,
     borderRadius: 14,
-    marginTop: 40,
+    marginTop: 30,
     elevation: 8,
   },
   buttonText: {
