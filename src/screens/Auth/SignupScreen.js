@@ -42,11 +42,11 @@ const SignupScreen = () => {
 
           {/* TOP IMAGE */}
           <Image
-            source={require("../../../assets/Image/backgrounds/car.png")}
+            source={require("../../../assets/Image/icons/store.png")}
             style={styles.headerImage}
           />
 
-          <Text style={styles.title}>Additional Details</Text>
+          {/* <Text style={styles.title}>Additional Details</Text> */}
           <Text style={styles.subtitle}>Fill your information below</Text>
 
           {/* FULL NAME */}
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 
   headerImage: {
     width: 230,
-    height: 130,
+    height: 150,
     alignSelf: "center",
     objectFit: "contain",
   },

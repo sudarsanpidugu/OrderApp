@@ -8,81 +8,109 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  Image
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import DropDownPicker from "react-native-dropdown-picker";
 import colors from "../../constants/colors";
 
 const LoginScreen = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigation = useNavigation();
+
+  // Mobile
+  const [mobile, setMobile] = useState("");
+
+  // Language
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const [languages, setLanguages] = useState([
+    { label: "English", value: "en" },
+    { label: "తెలుగు", value: "te" },
+    { label: "हिन्दी", value: "hi" },
+    { label: "தமிழ்", value: "ta" },
+    { label: "العربية", value: "ar" },
+  ]);
+
+  const handleLogin = () => {
+    if (mobile.length !== 10) {
+      alert("Please enter a valid 10-digit mobile number");
+      return;
+    }
+    navigation.navigate("OtpLogin", { mobile, language });
+  };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.card}>
-
-          {/* Top Image */}
+          {/* Logo */}
           <Image
-            source={require("../../../assets/Image/backgrounds/car.png")}
+            source={require("../../../assets/Image/icons/store.png")}
             style={styles.headerImage}
           />
 
-          <Text style={styles.title}>Welcome Back 👋</Text>
           <Text style={styles.subtitle}>Login to your account</Text>
 
+          {/* Language Selector */}
+          <Text style={styles.languageLabel}>Select Language</Text>
+          <DropDownPicker
+            open={languageOpen}
+            value={language}
+            items={languages}
+            setOpen={setLanguageOpen}
+            setValue={setLanguage}
+            setItems={setLanguages}
+            placeholder="Choose Language"
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropdownContainer}
+            textStyle={styles.dropdownText}
+            zIndex={1000}
+            zIndexInverse={3000}
+          />
+
+          {/* Mobile Input */}
           <View style={styles.inputContainer}>
-            <Ionicons name="call" size={22} color={colors.primary} style={styles.icon} />
+            <Ionicons
+              name="call-outline"
+              size={22}
+              color={colors.primary}
+              style={styles.icon}
+            />
+
+            <Text style={styles.countryCode}>+91</Text>
+
             <TextInput
               style={styles.input}
               placeholder="Mobile Number"
               placeholderTextColor={colors.textSecondary}
+              keyboardType="number-pad"
+              maxLength={10}
+              value={mobile}
+              onChangeText={(text) =>
+                setMobile(text.replace(/[^0-9]/g, ""))
+              }
             />
           </View>
 
-         {/* <View style={styles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={22} color={colors.primary} style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor={colors.textSecondary}
-              secureTextEntry={!passwordVisible}
-            />
-            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
-              <Ionicons
-                name={passwordVisible ? "eye-off-outline" : "eye-outline"}
-                size={22}
-                color={colors.primary}
-              />
-            </TouchableOpacity>
-          </View>*/}
-
-         {/* <TouchableOpacity style={styles.forgotContainer}>
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>*/}
-
-          <TouchableOpacity onPress={() => navigation.navigate("OtpLogin")}>
+          {/* Login Button */}
+          <TouchableOpacity onPress={handleLogin}>
             <LinearGradient
               colors={[colors.primary, colors.primary]}
               style={styles.button}
             >
-              <Text style={styles.buttonText}>Login /Register</Text>
+              <Text style={styles.buttonText}>Login / Register</Text>
             </LinearGradient>
           </TouchableOpacity>
-
-        {/*  <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-            <Text style={styles.loginText}>
-              Don’t have an account? <Text style={styles.register}>Register</Text>
-            </Text>
-          </TouchableOpacity>*/}
         </View>
-
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -104,13 +132,8 @@ const styles = StyleSheet.create({
     width: 230,
     height: 130,
     alignSelf: "center",
-    objectFit:"contain",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: colors.primary,
+    resizeMode: "contain",
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
@@ -118,6 +141,30 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginBottom: 10,
   },
+
+  /* Language */
+  languageLabel: {
+    marginTop: 10,
+    marginBottom: 6,
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontWeight: "600",
+  },
+  dropdown: {
+    borderColor: colors.border,
+    borderRadius: 12,
+    backgroundColor: colors.white,
+  },
+  dropdownContainer: {
+    borderColor: colors.border,
+    borderRadius: 12,
+  },
+  dropdownText: {
+    fontSize: 15,
+    color: colors.textDark,
+  },
+
+  /* Input */
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -128,22 +175,24 @@ const styles = StyleSheet.create({
     marginTop: 18,
     backgroundColor: colors.white,
   },
-  icon: { marginRight: 8 },
+  icon: {
+    marginRight: 6,
+  },
+  countryCode: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: colors.textDark,
+    marginRight: 6,
+  },
   input: {
     flex: 1,
     height: 50,
     fontSize: 16,
     color: colors.textDark,
+    letterSpacing: 1,
   },
-  forgotContainer: {
-    alignSelf: "flex-end",
-    marginTop: 10,
-  },
-  forgotText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: "600",
-  },
+
+  /* Button */
   button: {
     paddingVertical: 14,
     borderRadius: 14,
@@ -155,16 +204,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
-  },
-  loginText: {
-    marginTop: 18,
-    textAlign: "center",
-    fontSize: 15,
-    color: colors.textSecondary,
-  },
-  register: {
-    color: colors.primary,
-    fontWeight: "bold",
-    fontSize: 16,
   },
 });

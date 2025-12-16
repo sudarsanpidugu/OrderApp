@@ -14,7 +14,9 @@ const CommonHeader = ({ title, rightComponent }) => {
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
 
       <LinearGradient
-        colors={[colors.primary, "#4ca3ff"]}
+        colors={["#0F3C91", "#518effff"]}
+        start={{ x: 1, y: 1 }}
+        end={{ x: 1, y: 0 }}
         style={styles.headerGradient}
       >
         <View style={styles.row}>

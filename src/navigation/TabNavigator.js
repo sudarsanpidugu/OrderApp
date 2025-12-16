@@ -40,8 +40,8 @@ const TabNavigator = () => {
           let iconName =
             route.name === "Home"
               ? "home-outline"
-              : route.name === "Explore"
-              ? "search-outline"
+              : route.name === "Location"
+              ? "location-outline"
               : route.name === "Profile"
               ? "person-outline"
               : "menu-outline";
@@ -51,7 +51,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Explore" component={ExploreScreen} />
+      <Tab.Screen name="Location" component={ExploreScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="More" component={MoreScreen} />
     </Tab.Navigator>
